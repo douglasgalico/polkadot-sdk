@@ -15441,6 +15441,7 @@ version = "0.10.0-dev"
 dependencies = [
  "array-bytes",
  "futures",
+ "hex",
  "libp2p",
  "log",
  "parity-scale-codec",

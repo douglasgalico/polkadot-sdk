@@ -404,6 +404,15 @@ where
 
 		trace!(target: "sync", "Received {} transactions from {}", transactions.len(), who);
 		if let Some(ref mut peer) = self.peers.get_mut(&who) {
+
+			for t in &transactions {
+				let hash = self.transaction_pool.hash_of(&t);
+				let encoded = extrinsic.encode();
+				let hex_encoded = hex_encode(&encoded);
+
+				info!("Received Extrinsic from {}: {:?}  / {}", who, t, hex_encoded);
+			}
+
 			for t in transactions {
 				if self.pending_transactions.len() > MAX_PENDING_TRANSACTIONS {
 					debug!(
@@ -413,6 +422,8 @@ where
 					);
 					break
 				}
+
+
 
 				let hash = self.transaction_pool.hash_of(&t);
 				peer.known_transactions.insert(hash.clone());
@@ -434,6 +445,7 @@ where
 			}
 		}
 	}
+
 
 	fn on_handle_transaction_import(&mut self, who: PeerId, import: TransactionImport) {
 		match import {
